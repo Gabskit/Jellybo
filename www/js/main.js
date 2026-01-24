@@ -1,25 +1,16 @@
-
+"use strict";
 // NO USAR: import Alpine from 'alpinejs'
-var money: number = 1000
-// Definimos las variables para que TS no se queje de que no existen
-declare var $: any;
-declare var Alpine: any;
-declare var cordova: any; // Added for Cordova
-
+var money = 1000;
 document.addEventListener('alpine:init', () => {
-  Alpine.data('mnpg', () => ({
-    cash: "💵$:" + money
-  }))
-})
-
-
+    Alpine.data('mnpg', () => ({
+        cash: "💵$:" + money
+    }));
+});
 // --- Cordova Initialization ---
 document.addEventListener('deviceready', onDeviceReady, false);
-
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-
     // Alpine.js is already initialized by its own event listener,
     // so you can now safely use Cordova plugins or APIs.
 }

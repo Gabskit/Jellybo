@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="cdn/semantic.min.css">
 </head>
 <body>
+  <!-- Main Page -->
   <div x-data="mnpg" data-role="page" id="main">
     <div data-role="header" style="display: flex; justify-content: space-around; align-items: center;">
       <h1>hello</h1>
@@ -23,8 +24,25 @@
       </div>
     </div>
     <div data-role="content">
+        <p>This is the main page.</p>
+        <a href="#test-page" data-role="button" data-transition="slide">Go to Test Page</a>
     </div>
   </div>
-  <script src="main.js"></script>
+
+  <!-- Test Page -->
+  <div data-role="page" id="test-page">
+      <div data-role="header">
+          <a href="#main" data-role="button" data-icon="back">Back</a>
+          <h1>Test Page</h1>
+      </div>
+      <div data-role="content">
+          <p>Click the button to test the event listener.</p>
+          <button id="myButton">Test Button</button>
+      </div>
+  </div>
+
+  <!-- Essential Cordova and App Scripts -->
+  <script src="cordova.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
