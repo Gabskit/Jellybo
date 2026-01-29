@@ -1,0 +1,61 @@
+name: Build Jellybo Multiplatform
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-all:
+    name: Build for Android, iOS and Fedora
+    # Usamos macOS para poder compilar iOS, y desde aquí mismo sacamos los demás
+    runs-on: macos-latest 
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      # --- ANDROID ---
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Build Android APK
+        run: |
+          npx cap sync android
+          cd android && ./gradlew assembleDebug
+
+      # --- LINUX / FEDORA (Vía Electron) ---
+      - name: Build Linux RPM
+        run: |
+          npx cap sync @capacitor-community/electron
+          cd electron
+          npm install
+          # Ajusta este comando según tu script de electron-builder/forge
+          npm run electron:make -- --targets .rpm
+
+      # --- iOS ---
+      - name: Build iOS
+        run: |
+          npx cap sync ios
+          cd ios/App && pod install
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
+
+      # --- UPLOAD RESULTS ---
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jellybo-Package
+          path: |
+            android/app/build/outputs/apk/debug/app-debug.apk
+            electron/out/**/*.rpm
+            ios/App/build/Release-iphoneos/*.app

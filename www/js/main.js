@@ -10,11 +10,11 @@ document.addEventListener('alpine:init', () => {
     }));
     setTimeout(() => {
         curtain();
-    }, 3000);
+    }, 2000);
 });
 function curtain() {
     $.mobile.changePage('#main', { transition: "slideup" });
-    alert("Hola de nuevo");
+    //alert("Hola de nuevo")
 }
 // Inicialización de Stage y Eventos
 const app = new Stage({
