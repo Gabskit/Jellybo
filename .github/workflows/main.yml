@@ -32,23 +32,24 @@ jobs:
       - name: Build Android APK
         run: |
           npx cap sync android
-          cd android && ./gradlew assembleDebug --no-daemon --no-parallel --max-workers=2 --refresh-dependencies
+          cd android && ./gradlew assembleDebug --no-daemon --no-parallel --max-workers=1 --refresh-dependencies --stacktrace
 
       # --- LINUX / FEDORA (Vía Electron) ---
-      - name: Build Linux RPM
+      - name: Build Fedora RPM (ARM64)
         run: |
           npx cap sync @capacitor-community/electron
           cd electron
           npm install
-          # Ajusta este comando según tu script de electron-builder/forge
-          npm run electron:make -- --targets .rpm
-
+          # Instalamos electron-builder si no está
+          npm install electron-builder --save-dev
+          npm run build:linux
+          
       # --- iOS ---
       #- name: Build iOS
-        #run: |
-          #npx cap sync ios
-          #cd ios/App && pod install
-          #xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
+      #  run: |
+      #    npx cap sync ios
+      #    cd ios/App && pod install
+      #    xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
 
       # --- UPLOAD RESULTS ---
       - name: Upload Artifacts
