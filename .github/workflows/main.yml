@@ -7,7 +7,7 @@ jobs:
   build-all:
     name: Build for Android, iOS and Fedora
     # Usamos macOS para poder compilar iOS, y desde aquí mismo sacamos los demás
-    runs-on: macos-latest 
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout Code
@@ -44,11 +44,11 @@ jobs:
           npm run electron:make -- --targets .rpm
 
       # --- iOS ---
-      - name: Build iOS
-        run: |
-          npx cap sync ios
-          cd ios/App && pod install
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
+      #- name: Build iOS
+        #run: |
+          #npx cap sync ios
+          #cd ios/App && pod install
+          #xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO
 
       # --- UPLOAD RESULTS ---
       - name: Upload Artifacts
@@ -58,4 +58,4 @@ jobs:
           path: |
             android/app/build/outputs/apk/debug/app-debug.apk
             electron/out/**/*.rpm
-            ios/App/build/Release-iphoneos/*.app
+            #ios/App/build/Release-iphoneos/*.app
